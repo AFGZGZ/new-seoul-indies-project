@@ -1,17 +1,57 @@
 ---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
+const games: CollectionEntry<'games'>[] = await getCollection('games');
+const posts: CollectionEntry<'posts'>[] = await getCollection('posts');
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Seoul Indies — Indie Developer Initiative</title>
+    <meta name="viewport" content="width=device-width" />
+  </head>
+  <body style="font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; background: #0f172a; color: #f8fafc;">
+    
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; border-bottom: 1px solid #334155; padding-bottom: 1rem;">
+      <h1 style="margin: 0; font-size: 1.5rem; color: #38bdf8;">🇰🇷 Seoul Indies</h1>
+      <nav style="display: flex; gap: 1.5rem;">
+        <a href="/games" style="color: #cbd5e1; text-decoration: none;">Games</a>
+        <a href="/blog" style="color: #cbd5e1; text-decoration: none;">Blog</a>
+        <a href="/admin" style="background: #6366f1; color: white; padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none;">Admin</a>
+      </nav>
+    </header>
+
+    <section style="text-align: center; padding: 4rem 0; background: linear-gradient(to bottom, #1e293b, #0f172a); border-radius: 12px; margin-bottom: 3rem; border: 1px solid #334155;">
+      <h2 style="font-size: 3rem; margin: 0 0 1rem 0;">Empowering Indie Devs in Seoul</h2>
+      <p style="color: #94a3b8; font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem auto;">
+        A community-driven initiative showcasing local video game projects, prototypes, and stories.
+      </p>
+      <a href="/games" style="background: #38bdf8; color: #0f172a; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: bold; text-decoration: none;">Explore Games ({games.length})</a>
+    </section>
+
+    <section>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="margin: 0; font-size: 1.5rem;">Latest Community Updates</h3>
+        <a href="/blog" style="color: #38bdf8; text-decoration: none; font-size: 0.9rem;">View all &rarr;</a>
+      </div>
+      
+      {posts.length === 0 ? (
+        <p style="color: #64748b; font-style: italic;">No blog posts yet. Head over to /admin to write your first update!</p>
+      ) : (
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          {posts.slice(0, 3).map((post: CollectionEntry<'posts'>) => (
+            <article style="background: #1e293b; padding: 1.25rem; border-radius: 8px; border: 1px solid #334155;">
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 1.2rem;">
+                <a href={`/blog/${post.id}`} style="color: #f8fafc; text-decoration: none;">{post.data.title}</a>
+              </h4>
+              {post.data.excerpt && <p style="color: #94a3b8; margin: 0; font-size: 0.95rem;">{post.data.excerpt}</p>}
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+
+  </body>
 </html>

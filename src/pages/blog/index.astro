@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts: CollectionEntry<'posts'>[] = await getCollection('posts');
+---
+
+<Layout title="Blog">
+  <p><a href="/" style="color: #38bdf8; text-decoration: none;">&larr; Home</a></p>
+  <h1 style="font-size: 2.5rem; margin-bottom: 2rem;">Community Blog</h1>
+
+  <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+    {posts.map((post) => (
+      <article style="background: #1e293b; padding: 1.5rem; border-radius: 8px; border: 1px solid #334155;">
+        {post.data.publishDate && (
+          <span style="font-size: 0.8rem; color: #38bdf8; text-transform: uppercase;">{post.data.publishDate}</span>
+        )}
+        <h2 style="margin: 0.25rem 0 0.75rem 0; font-size: 1.5rem;">
+          <a href={`/blog/${post.id}`} style="color: #f8fafc; text-decoration: none;">{post.data.title}</a>
+        </h2>
+        {post.data.excerpt && <p style="color: #94a3b8; margin: 0 0 1rem 0;">{post.data.excerpt}</p>}
+        <a href={`/blog/${post.id}`} style="color: #38bdf8; text-decoration: none; font-size: 0.9rem; font-weight: 500;">Read full post &rarr;</a>
+      </article>
+    ))}
+  </div>
+</Layout>

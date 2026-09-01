@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title} — Seoul Indies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body style="font-family: system-ui, -apple-system, sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; background: #0f172a; color: #f8fafc; line-height: 1.6;">
+    
+    <!-- Shared Global Navigation Header -->
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; border-bottom: 1px solid #334155; padding-bottom: 1rem;">
+      <a href="/" style="font-size: 1.25rem; font-weight: bold; color: #38bdf8; text-decoration: none;">🇰🇷 Seoul Indies</a>
+      <nav style="display: flex; gap: 1.5rem; align-items: center;">
+        <a href="/games" style="color: #cbd5e1; text-decoration: none;">Games</a>
+        <a href="/blog" style="color: #cbd5e1; text-decoration: none;">Blog</a>
+        <a href="/admin" style="background: #6366f1; color: white; padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem;">Admin</a>
+      </nav>
+    </header>
+
+    <!-- Main Dynamic Content Container -->
+    <main>
+      <slot />
+    </main>
+
+    <!-- Shared Footer -->
+    <footer style="margin-top: 4rem; border-top: 1px solid #334155; padding-top: 1.5rem; text-align: center; color: #64748b; font-size: 0.875rem;">
+      <p>© {new Date().getFullYear()} Seoul Indies Initiative.</p>
+    </footer>
+
+  </body>
+</html>

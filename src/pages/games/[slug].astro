@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const games = await getCollection('games');
+  return games.map((game) => ({
+    params: { slug: game.id },
+    props: { game },
+  }));
+}
+
+type Props = {
+  game: CollectionEntry<'games'>;
+};
+
+const { game } = Astro.props;
+const { Content } = await render(game);
+---
+
+<Layout title={game.data.title}>
+  
+  <p><a href="/games" style="color: #38bdf8; text-decoration: none;">&larr; Back to Games Directory</a></p>
+
+  <article style="margin-top: 1.5rem;">
+    
+    <div style="margin-bottom: 1rem;">
+      <span style="font-size: 0.8rem; background: #334155; color: #38bdf8; padding: 0.3rem 0.75rem; border-radius: 999px; font-weight: 500; text-transform: uppercase;">
+        {game.data.status}
+      </span>
+    </div>
+
+    <h1 style="font-size: 2.75rem; margin: 0.5rem 0 0.5rem 0;">{game.data.title}</h1>
+    <p style="color: #94a3b8; font-size: 1.1rem; margin-bottom: 2rem;">
+      Developed by <strong style="color: #f8fafc;">{game.data.developer}</strong>
+    </p>
+
+    {game.data.cover && (
+      <div style="margin-bottom: 2.5rem; border-radius: 12px; overflow: hidden; border: 1px solid #334155; max-height: 400px;">
+        <img src={game.data.cover} alt={game.data.title} style="width: 100%; height: 100%; object-fit: cover;" />
+      </div>
+    )}
+
+    <div style="line-height: 1.8; color: #cbd5e1; font-size: 1.05rem;">
+      <Content />
+    </div>
+
+  </article>
+
+</Layout>

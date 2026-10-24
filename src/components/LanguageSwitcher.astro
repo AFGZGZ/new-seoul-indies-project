@@ -1,0 +1,33 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const currentPath = Astro.url.pathname;
+const currentLocale = Astro.currentLocale ?? "en";
+
+// Remove the locale prefix so we can rebuild the URL
+// for the other language.
+const pathWithoutLocale =
+  currentLocale === "ko"
+    ? currentPath.replace(/^\/ko(?=\/|$)/, "") || "/"
+    : currentPath;
+
+const normalizedPath = pathWithoutLocale.replace(/^\/+|\/+$/g, "");
+
+const englishUrl = normalizedPath
+  ? getRelativeLocaleUrl("en", normalizedPath)
+  : getRelativeLocaleUrl("en", "");
+
+const koreanUrl = normalizedPath
+  ? getRelativeLocaleUrl("ko", normalizedPath)
+  : getRelativeLocaleUrl("ko", "");
+---
+
+<nav aria-label="Language selector">
+  <a href={englishUrl} hreflang="en" lang="en" aria-current={currentLocale === "en" ? "page" : undefined}>
+    EN
+  </a>
+  <span aria-hidden="true"> / </span>
+  <a href={koreanUrl} hreflang="ko" lang="ko" aria-current={currentLocale === "ko" ? "page" : undefined}>
+    한국어
+  </a>
+</nav>

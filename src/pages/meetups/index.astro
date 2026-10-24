@@ -1,0 +1,83 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const meetings = await getCollection("meetups");
+const now = new Date();
+
+const sorted = meetings.sort(
+  (a, b) => a.data.date.getTime() - b.data.date.getTime()
+);
+
+const upcoming = sorted.filter(
+  (meeting) => meeting.data.date >= new Date(now.toDateString())
+);
+
+const past = sorted.filter(
+  (meeting) => meeting.data.date < new Date(now.toDateString())
+).reverse();
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+---
+
+<Layout title="Meetings | Seoul Indies">
+  <main class="mx-auto max-w-5xl px-4 py-12">
+    <h1 class="mb-3 text-4xl font-bold">Meetings</h1>
+    <p class="mb-10 text-slate-600">
+      Find our upcoming meetups and revisit past events.
+    </p>
+
+    <h2 class="mb-5 text-2xl font-bold">Upcoming meetings</h2>
+
+    {upcoming.length > 0 ? (
+      <div class="grid gap-6 sm:grid-cols-2">
+        {upcoming.map((meeting) => (
+          <a
+            href={`/meetings/${meeting.id}/`}
+            class="rounded-xl border border-slate-200 p-6 transition hover:border-slate-500"
+          >
+            <p class="mb-2 text-sm text-slate-500">
+              {formatDate(meeting.data.date)}
+            </p>
+            <h3 class="mb-3 text-xl font-bold">
+              {meeting.data.title}
+            </h3>
+            <p class="mb-2 text-sm">{meeting.data.location}</p>
+            <p class="text-sm text-slate-600">
+              Entry: {meeting.data.fee}
+            </p>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="text-slate-600">No upcoming meetings announced yet.</p>
+    )}
+
+    <h2 class="mb-5 mt-14 text-2xl font-bold">Past meetings</h2>
+
+    {past.length > 0 ? (
+      <div class="grid gap-6 sm:grid-cols-2">
+        {past.map((meeting) => (
+          <a
+            href={`/meetings/${meeting.id}/`}
+            class="rounded-xl border border-slate-200 p-6 opacity-80 transition hover:opacity-100"
+          >
+            <p class="mb-2 text-sm text-slate-500">
+              {formatDate(meeting.data.date)}
+            </p>
+            <h3 class="text-xl font-bold">{meeting.data.title}</h3>
+            <p class="mt-2 text-sm">{meeting.data.location}</p>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="text-slate-600">No past meetings yet.</p>
+    )}
+  </main>
+</Layout>

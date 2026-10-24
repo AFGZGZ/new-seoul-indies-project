@@ -1,0 +1,80 @@
+---
+const { media = [], cover } = Astro.props;
+
+const items = media.length > 0 ? media : cover ? [{ type: 'image', src: cover }] : [];
+
+const hasItems = items.length > 0;
+---
+
+{
+  !hasItems ? (
+    <div class="aspect-video w-full rounded-2xl bg-black flex items-center justify-center text-white">
+      No media available
+    </div>
+  ) : (
+    <div class="space-y-4">
+      {/* MAIN VIEW (mobile-safe) */}
+      <div id="viewer" class="aspect-video w-full overflow-hidden rounded-2xl bg-black shadow-xl">
+        {items[0].type === 'youtube' ? (
+          <iframe
+            class="h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${items[0].id}`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          />
+        ) : (
+          <img src={items[0].src} class="h-full w-full object-cover" />
+        )}
+      </div>
+
+      {/* THUMBNAILS (mobile scroll optimized) */}
+      <div class="flex gap-3 overflow-x-auto pb-2 scroll-smooth snap-x snap-mandatory">
+        {items.map((item, i) => (
+          <button
+            class="h-20 w-32 sm:h-24 sm:w-40 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-default opacity-70 hover:opacity-100 active:scale-95 transition-transform snap-start"
+            data-type={item.type}
+            data-src={item.type === 'youtube' ? item.id : item.src}
+          >
+            {item.type === 'youtube' ? (
+              <div class="flex h-full w-full items-center justify-center bg-black text-xs sm:text-sm text-white">
+                ▶ Trailer
+              </div>
+            ) : (
+              <img src={item.src} class="h-full w-full object-cover" loading="lazy" />
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+<script is:inline>
+  const viewer = document.getElementById('viewer');
+  const buttons = document.querySelectorAll('button[data-type]');
+
+  function render(type, src) {
+    if (!viewer) return;
+
+    if (type === 'youtube') {
+      viewer.innerHTML = `
+        <iframe
+          class="h-full w-full"
+          src="https://www.youtube-nocookie.com/embed/${src}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      `;
+    } else {
+      viewer.innerHTML = `
+        <img src="${src}" class="h-full w-full object-cover" />
+      `;
+    }
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      render(btn.dataset.type, btn.dataset.src);
+    });
+  });
+</script>

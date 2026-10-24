@@ -9,37 +9,194 @@ media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
 collections:
-  - name: "posts"
-    label: "Blog Posts"
-    folder: "src/content/posts"
+  - name: posts
+    label: Blog Posts
+    folder: src/content/posts
     create: true
     slug: "{{slug}}"
-    extension: "md"
+    extension: md
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
-      - {
-          label: "Publish Date",
-          name: "publishDate",
-          widget: "datetime",
-          required: false,
-        }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - label: Title
+        name: title
+        widget: string
+      - label: Excerpt
+        name: excerpt
+        widget: text
+        required: false
+      - label: Publish Date
+        name: publishDate
+        widget: datetime
+        required: false
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: Body
+        name: body
+        widget: markdown
 
-  - name: "games"
-    label: "Games Directory"
-    folder: "src/content/games"
+  - name: games
+    label: Games Directory
+    folder: src/content/games
     create: true
     slug: "{{slug}}"
-    extension: "md"
+    extension: md
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Developer", name: "developer", widget: "string" }
-      - { label: "Status", name: "status", widget: "string" }
-      - {
-          label: "Cover Image",
-          name: "cover",
-          widget: "image",
-          required: false,
-        }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - label: Title
+        name: title
+        widget: string
+      - label: Description
+        name: description
+        widget: text
+      - label: Developer
+        name: developer
+        widget: string
+      - label: Developer Website
+        name: developerWebsite
+        widget: string
+        required: false
+      - label: Status
+        name: status
+        widget: select
+        options:
+          - Prototype
+          - In Development
+          - Released
+        default: Prototype
+      - label: Genre
+        name: genre
+        widget: string
+      - label: Cover Image
+        name: cover
+        widget: image
+        required: false
+      - label: Platforms
+        name: platforms
+        widget: list
+        required: false
+        default: []
+      - label: Game Engine
+        name: engine
+        widget: string
+        required: false
+      - label: Team Size
+        name: teamSize
+        widget: number
+        required: false
+        value_type: int
+        min: 1
+      - label: Game Website
+        name: website
+        widget: string
+        required: false
+      - label: GitHub
+        name: github
+        widget: string
+        required: false
+      - label: itch.io
+        name: itch
+        widget: string
+        required: false
+      - label: Steam
+        name: steam
+        widget: string
+        required: false
+      - label: Discord
+        name: discord
+        widget: string
+        required: false
+      - label: Tags
+        name: tags
+        widget: list
+        required: false
+        default: []
+      - label: Publish Date
+        name: publishDate
+        widget: datetime
+        required: false
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: Draft
+        name: draft
+        widget: boolean
+        required: false
+        default: false
+      - label: Media Gallery
+        name: media
+        widget: list
+        required: false
+        types:
+          - name: image
+            label: Image
+            widget: object
+            fields:
+              - label: Type
+                name: type
+                widget: hidden
+                default: image
+              - label: Image Source
+                name: src
+                widget: string
+          - name: youtube
+            label: YouTube Video
+            widget: object
+            fields:
+              - label: Type
+                name: type
+                widget: hidden
+                default: youtube
+              - label: YouTube Video ID
+                name: id
+                widget: string
+      - label: Body
+        name: body
+        widget: markdown
+
+  - name: meetups
+    label: Meetups
+    folder: src/content/meetups
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: Date
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: Start Time
+        name: startTime
+        widget: string
+        required: false
+        hint: "Example: 14:00"
+      - label: End Time
+        name: endTime
+        widget: string
+        required: false
+        hint: "Example: 17:00"
+      - label: Fee
+        name: fee
+        widget: string
+        hint: "Example: Free or ₩10,000"
+      - label: Location Name
+        name: location
+        widget: string
+      - label: Address
+        name: address
+        widget: string
+      - label: Map URL
+        name: mapUrl
+        widget: string
+        required: false
+      - label: Registration URL
+        name: registrationUrl
+        widget: string
+        required: false
+      - label: Cover Image
+        name: cover
+        widget: image
+        required: false
+      - label: Body
+        name: body
+        widget: markdown

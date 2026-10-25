@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import MediaCarousel from '../../components/MediaCarousel.astro';
+import MediaCarousel from '../../components/games/MediaCarousel.astro';
 import Layout from '../../layouts/Layout.astro';
 
 
@@ -65,6 +65,22 @@ const { Content } = await render(game);
               <span class="font-semibold text-foreground">Status:</span><br />
               {game.data.status}
             </p>
+
+            {game.data.tags?.length > 0 && (
+  <div class="mt-3 flex flex-wrap gap-2">
+      <p>
+              <span class="font-semibold text-foreground"> tags:</span><br />
+             
+            </p>
+    {game.data.tags.map((tag) => (
+      <span
+        class=" border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600"
+      >
+        {tag}
+      </span>
+    ))}
+  </div>
+)}
           </div>
         </div>
 
@@ -76,7 +92,7 @@ const { Content } = await render(game);
             {
               game.data.website && (
                 <a class="text-primary hover:underline" href={game.data.website} target="_blank">
-                  ▶ Website / Play
+                  Website / Play
                 </a>
               )
             }
@@ -84,7 +100,7 @@ const { Content } = await render(game);
             {
               game.data.github && (
                 <a class="text-primary hover:underline" href={game.data.github} target="_blank">
-                  💻 GitHub
+                  GitHub
                 </a>
               )
             }
@@ -92,7 +108,7 @@ const { Content } = await render(game);
             {
               game.data.itch && (
                 <a class="text-primary hover:underline" href={game.data.itch} target="_blank">
-                  🎮 itch.io
+                  itch.io
                 </a>
               )
             }

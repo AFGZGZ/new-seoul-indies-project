@@ -1,0 +1,156 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+const { t } = Astro.props;
+
+const meetups: CollectionEntry<"meetups">[] =
+  await getCollection("meetups");
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const sortedMeetups = [...meetups].sort(
+  (a, b) => a.data.date.getTime() - b.data.date.getTime()
+);
+
+const nextMeetup = sortedMeetups.find(
+  (meetup) => meetup.data.date >= today
+);
+
+const previousMeetups = sortedMeetups
+  .filter((meetup) => meetup.data.date < today)
+  .reverse();
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+function getMapSrc(meetup: CollectionEntry<"meetups">) {
+  return (
+    meetup.data.mapEmbedUrl ??
+    `https://maps.google.com/maps?q=${encodeURIComponent(
+      meetup.data.address
+    )}&output=embed`
+  );
+}
+---
+
+<section class="mb-16">
+  <div class="mb-6">
+    <h3 class="text-2xl font-bold sm:text-3xl">
+      {t.meetupT1}
+    </h3>
+  </div>
+
+  {nextMeetup ? (
+    <div class="group mb-10 grid overflow-hidden border border-slate-700 transition hover:border-slate-500 sm:grid-cols-5">
+      <!-- Map preview: top on mobile, right on desktop -->
+    <div class="order-2 min-w-0 overflow-hidden sm:order-2 sm:col-span-2">
+        <iframe
+          src={getMapSrc(nextMeetup)}
+          title={`Map showing ${nextMeetup.data.location}`}
+          width="100%"
+          height="280"
+          class="block h-64 w-full sm:h-full sm:min-h-80"
+          style="border: 0;"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <!-- Meetup details -->
+  <div class="order-1 flex min-w-0 flex-col justify-center p-6 sm:order-1 sm:col-span-3 sm:p-8">
+        <p class="mb-2 text-sm text-slate-400">
+          {formatDate(nextMeetup.data.date)}
+          {nextMeetup.data.startTime &&
+            ` · ${nextMeetup.data.startTime}`}
+          {nextMeetup.data.endTime &&
+            ` – ${nextMeetup.data.endTime}`}
+        </p>
+
+        <h4 class="mb-4 text-2xl font-bold sm:text-3xl">
+          {nextMeetup.data.title}
+        </h4>
+
+        <p class="mb-1 text-sm">
+          {nextMeetup.data.location}
+        </p>
+
+        {/* <p class="mb-2 text-sm text-slate-400">
+          {nextMeetup.data.address}
+        </p> */}
+
+        <p class="mb-6 text-sm">
+          <span class="font-semibold">Entry:</span>{" "}
+          {nextMeetup.data.fee}
+        </p>
+
+        <a
+          href={`/meetups/${nextMeetup.id}/`}
+          class="font-semibold underline-offset-4 hover:underline"
+        >
+          Meetup details <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  ) : (
+    <div class="mb-10 border border-slate-700 p-6 sm:p-8">
+      <h4 class="text-xl font-bold">
+        No upcoming meetups announced yet
+      </h4>
+      <p class="mt-2 text-slate-400">
+        Check back soon for our next community gathering!
+      </p>
+    </div>
+  )}
+
+  <!-- Previous meetups -->
+  <div class="mb-4 flex items-center justify-between gap-4">
+    <h4 class="text-xl font-bold">
+      {t.meetupT2}
+    </h4>
+
+    {previousMeetups.length > 1 && (
+      <span class="shrink-0 text-xs text-slate-500">
+        Scroll to explore →
+      </span>
+    )}
+  </div>
+
+  {previousMeetups.length > 0 ? (
+    <div class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4">
+      {previousMeetups.map((meetup) => (
+        <a
+          href={`/meetups/${meetup.id}/`}
+          class="group w-[80%] shrink-0 snap-start border border-slate-700 p-5 transition hover:border-slate-500 sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]"
+        >
+          <p class="mb-3 text-sm text-slate-400">
+            {formatDate(meetup.data.date)}
+          </p>
+
+          <h5 class="mb-3 text-lg font-bold transition group-hover:text-slate-500">
+            {meetup.data.title}
+          </h5>
+
+          <p class="text-sm text-slate-400">
+            {meetup.data.location}
+          </p>
+
+          <p class="mt-5 text-sm font-semibold">
+            View meetup <span aria-hidden="true">→</span>
+          </p>
+        </a>
+      ))}
+    </div>
+  ) : (
+    <p class="text-sm italic text-slate-500">
+      Previous meetups will appear here after our first event.
+    </p>
+  )}
+</section>

@@ -5,6 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
+
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -20,18 +21,38 @@ const { Content } = await render(post);
 ---
 
 <Layout title={post.data.title}>
-  
-  <p><a href="/blog" style="color: #38bdf8; text-decoration: none;">&larr; Back to Blog</a></p>
-  
-  <article style="margin-top: 1.5rem;">
-    {post.data.publishDate && (
-      <span style="font-size: 0.875rem; color: #38bdf8; text-transform: uppercase;">{post.data.publishDate}</span>
-    )}
-    <h1 style="font-size: 2.5rem; margin: 0.5rem 0 1.5rem 0;">{post.data.title}</h1>
-    
-    <div style="line-height: 1.8; color: #cbd5e1; font-size: 1.05rem;">
-      <Content />
-    </div>
-  </article>
+  <main class="mx-auto max-w-4xl py-8">
+    <a
+      href="/blog"
+      class="text-sm text-slate-500 no-underline transition-colors hover:text-slate-900"
+    >
+      &larr; Back to Blog
+    </a>
 
+    <article class="mt-6">
+          <h1 class="mb-8 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        {post.data.title}
+      </h1>
+      {post.data.coverImage && (
+        <div class="mb-8 h-56 overflow-hidden  bg-slate-100 sm:h-80 md:h-96">
+          <img
+            src={post.data.coverImage}
+            alt={post.data.title}
+            fetchpriority="high"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      )}
+
+      {post.data.publishDate && (
+        <p class="mb-3 text-sm font-medium uppercase tracking-wider text-slate-500">
+          {post.data.publishDate}
+        </p>
+      )}
+
+      <div class="prose prose-slate max-w-none text-[1.05rem] leading-8">
+        <Content />
+      </div>
+    </article>
+  </main>
 </Layout>

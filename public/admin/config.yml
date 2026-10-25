@@ -23,6 +23,12 @@ collections:
         name: excerpt
         widget: text
         required: false
+      - label: Cover Image
+        name: coverImage
+        widget: image
+        required: false
+        media_folder: "/public/images/posts"
+        public_folder: "/images/posts"
       - label: Publish Date
         name: publishDate
         widget: datetime

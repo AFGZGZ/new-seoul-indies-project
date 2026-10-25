@@ -1,12 +1,16 @@
 ---
 title: "Seoul Indies November Meetup"
-date: 2026-11-15
-startTime: "14:00"
-endTime: "18:00"
-fee: "Free"
-location: "Example Game Café"
-address: "Gangnam Station, Seoul, South Korea"
-registrationUrl: "https://example.com/register"
+date: 2026-11-29
+startTime: "20:00"
+endTime: "23:00"
+fee: "10,000 KRW"
+location: "Location: Enough Lounge
+  11 Toegeong-ro 17gil
+  Mapu-gu Seoul"
+address: "Location: Enough Lounge
+  11 Toegeong-ro 17gil
+  Mapu-gu Seoul"
+registrationUrl: "https://meetup.com/"
 ---
 
 Join us for our November meetup!

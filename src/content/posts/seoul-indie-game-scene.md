@@ -2,6 +2,7 @@
 title: "The Growing Indie Game Scene in Seoul"
 excerpt: "Discover how Seoul's independent game developers are building creative experiences and bringing the local gaming community together."
 publishDate: "2026-10-20"
+coverImage: "/posts/seoul-indies.jpg"
 ---
 
 # The Growing Indie Game Scene in Seoul

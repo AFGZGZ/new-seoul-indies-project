@@ -1,0 +1,121 @@
+---
+import { getCollection, render } from 'astro:content';
+import MediaCarousel from '../../../components/games/MediaCarousel.astro';
+import Layout from '../../../layouts/Layout.astro';
+
+
+export async function getStaticPaths() {
+  const games = await getCollection('games');
+
+  return games.map((game) => ({
+    params: {
+      slug: game.id,
+    },
+    props: {
+      game,
+    },
+  }));
+}
+
+const { game } = Astro.props;
+const { Content } = await render(game);
+
+// const metadata = {
+//   title: game.data.title,
+//   description: game.data.description,
+// };
+---
+<Layout title="Blog">
+  <div class="mx-auto max-w-6xl px-4">
+    <h1 class="text-5xl font-bold py-8">
+      {game.data.title}
+    </h1>
+    <MediaCarousel media={game.data.media ?? []} cover={game.data.cover} />
+    {/* MAIN GRID */}
+    <div class="grid gap-10 lg:grid-cols-[1fr_300px]">
+      {/* LEFT COLUMN */}
+      <div>
+        <article class="prose dark:prose-invert mt-10 max-w-none">
+          <Content />
+        </article>
+      </div>
+
+      {/* RIGHT SIDEBAR */}
+      <aside class="space-y-6">
+        <div class="border border-default p-4">
+          <p>
+            {game.data.description}
+          </p>
+        </div>
+        <div class=" border border-default p-4">
+          <h3 class="mb-4 font-semibold">Game Info</h3>
+
+          <div class="space-y-2 text-sm text-muted">
+            <p>
+              <span class="font-semibold text-foreground">Developer:</span><br />
+              {game.data.developer}
+            </p>
+
+            <p>
+              <span class="font-semibold text-foreground">Genre:</span><br />
+              {game.data.genre}
+            </p>
+
+            <p>
+              <span class="font-semibold text-foreground">Status:</span><br />
+              {game.data.status}
+            </p>
+
+            {game.data.tags?.length > 0 && (
+  <div class="mt-3 flex flex-wrap gap-2">
+      <p>
+              <span class="font-semibold text-foreground"> tags:</span><br />
+             
+            </p>
+    {game.data.tags.map((tag) => (
+      <span
+        class=" border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600"
+      >
+        {tag}
+      </span>
+    ))}
+  </div>
+)}
+          </div>
+        </div>
+
+        {/* LINKS BOX */}
+        <div class="rounded-sm border border-default p-4">
+          <h3 class="mb-4 font-semibold">Links</h3>
+
+          <div class="flex flex-col gap-2 text-sm">
+            {
+              game.data.website && (
+                <a class="text-primary hover:underline" href={game.data.website} target="_blank">
+                  Website / Play
+                </a>
+              )
+            }
+
+            {
+              game.data.github && (
+                <a class="text-primary hover:underline" href={game.data.github} target="_blank">
+                  GitHub
+                </a>
+              )
+            }
+
+            {
+              game.data.itch && (
+                <a class="text-primary hover:underline" href={game.data.itch} target="_blank">
+                  itch.io
+                </a>
+              )
+            }
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  </Layout>
+

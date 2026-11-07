@@ -129,6 +129,16 @@ https://developers.cloudflare.com/pages/configuration/custom-domains/
 
 - Go to your website/admin and try to loging using your Github credentials.
 
+### Edit the admin config
+
+- On the repository go to the public folder and open the **config.yml** file.
+  
+- Click the pencil icon to edit the file.
+  
+- Change the lines 3 (repo) and 5 (base_url) so they point to your repository and worker.
+  
+- Commit the changes.
+
 ## ADDING CONTENT
 
 **Coming Soon**
